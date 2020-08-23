@@ -20,11 +20,6 @@ function eventListeners() {
 }
 
 
-
-
-
-
-
 // Funciones:
 // Añadir tweet al formulario
 function agregarTweet(e) {
@@ -49,6 +44,10 @@ function agregarTweet(e) {
 
     // Agregar a LocalStorage
     agregarTweetLocalStorage(tweet);
+
+    // Borrar lo ue está escrito
+    document.getElementById('tweet').value = '';
+
 }
 
 
@@ -57,7 +56,9 @@ function borrarTweet(e) {
     e.preventDefault();
     if (e.target.className === 'borrar-tweet') {
         e.target.parentElement.remove();
-        alert('Tweet ha sido eliminado');
+        
+        borrarTweetLocalStorage(e.target.parentElement.innerText);
+
     }
 }
 
@@ -111,5 +112,25 @@ function obtenerTweetsLocalStorage() {
         tweets = JSON.parse(localStorage.getItem('tweets') );
     }
     return tweets;
+}
+
+
+// Eliminar tweet de LS
+function borrarTweetLocalStorage(tweet) {
+
+    let tweets, tweetBorrar;
+    
+    // Eliminar X del tweet
+    tweetBorrar = tweet.substring(0, tweet.length - 1);
+
+    tweets = obtenerTweetsLocalStorage();
+
+    tweets.forEach(function(tweet, index) {
+        if (tweetBorrar === tweet) {
+            tweets.splice(index, 1);
+        }
+    });
+
+    localStorage.setItem('tweets', JSON.stringify(tweets) );
 }
 
